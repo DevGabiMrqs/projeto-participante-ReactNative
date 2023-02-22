@@ -1,16 +1,33 @@
-import React from "react";
-import { Text, View, TextInput, TouchableOpacity, FlatList} from "react-native";
+import React, {useState} from "react";
+import { Text, View, TextInput, TouchableOpacity, FlatList, Alert} from "react-native";
 import {styles} from './styles'
 import { Participant } from "../../components/Participant";
+ 
 
 export default function Home() {
-  const participants = ["Gabiroba Specter1", "Sugiro kemeame", "Mershk", "Fry123", "Sinuca de corda", "Kuhro", "LeCalvão", "BNine", "Raelz", "Griffom", "Pimba Café", "YoneDale"];
+
+  const [participants, setParticipants] = useState(["Gabiroba Specter1"])
+
 
   function handleParticipantAdd() {
-    console.log("Você clicou no botão de Adicionar");
+    if(participants.includes("Mershk")) {
+      return Alert.alert("Jogador existente", "Já existe um jogador na lista com esse nome!")
+    }
+
+    setParticipants(prevState => [...prevState, 'Kurho'])
+   
   }
 
   function handleParticipantRemove(name: string) {
+    Alert.alert("Remover", `Remover o jogador ${name}?`, [
+      {
+        text: 'Sim',
+        onPress: () => Alert.alert("Deletado!")
+      },
+      {
+        text: 'Não'
+      }
+    ]);
     console.log(`Você clicou em remover o(a) jogador(a) ${name}`);
   }
 
@@ -40,22 +57,32 @@ export default function Home() {
     </View> 
 
     <FlatList 
-      data={[]}
+      data={participants}
       keyExtractor={item => item}
       renderItem={({item}) => (
         <Participant 
         key={item}
         name={item} 
-        onRemove={() => handleParticipantRemove("gab")}
+        onRemove={() => handleParticipantRemove(item)}
         />
       )}
       showsVerticalScrollIndicator={false}
       ListEmptyComponent= {() => (
         <Text style={styles.listEmptyText}>
-        Ninguém entrou no Time ainda? Adicione um player na sua lista.
         </Text>
       )}
     />
   </View>
   )
 }
+
+/*Eu tenho um array de participants, só tem a Gabiroba nele, quando eu clicar em adicionar, ele vai pular o IF pois
+o Mershk não está incluído na lista*/
+
+
+
+
+
+
+
+/*, "Sugiro kemeame", "Mershk", "Fry123", "Sinuca de corda", "Kuhro", "LeCalvão", "BNine", "Raelz", "Griffom", "Pimba Café", "YoneDale"*/
